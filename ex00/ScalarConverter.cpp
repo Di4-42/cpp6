@@ -19,12 +19,27 @@ ScalarConverter::~ScalarConverter()
 {
 }
 
+static void	impossible()
+{}
+
 static bool	special(std::string input)
 {
 }
 
-static bool	readNumber(std::string input, double number)
+static bool	readNumber(std::string input, double& number)
 {
+	bool	isFloat = false;
+	bool	hasDecimal = false;
+
+	if (input.empty())
+		return false;
+	if (input[input.size() - 1] == 'f')
+	{
+		isFloat = true;
+		input.erase(input.size() - 1);
+	}
+
+
 }
 
 static void     convertToChar(double number)
