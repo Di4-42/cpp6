@@ -19,14 +19,30 @@ ScalarConverter::~ScalarConverter()
 {
 }
 
-static void     convertToChar(double number)
+void	convertToInt(const std::string input)
 {
-	std::cout << "char: ";
+	//input = "a" [std::string];
+	if (input.size() == 1 && !std::isdigit(static_cast<unsigned char>(input[0]))) 
+	{
+		std::cout << "int: " << static_cast<int>(input[0]) << std::endl; // int: 97
+		return;
+	}
+	char *endptr;
+	errno = 0;
+	double nb = std::strtod(input.c_str(), &endptr); // input = "42.5f" | endptr = 'f' | nb = 42.5
+
+	if(endptr == input.c_str() || !(*endptr == '\0' || (*endptr == 'f' && endptr[1] == '\0')) // 
+			|| errno == ERANGE ||  nb != nb || nb <= static_cast<double>(INT_MIN) - 1.0
+			|| nb >= static_cast<double>(INT_MAX) + 1.0)
+		std::cout << "int: impossible" << std::endl;
+	else
+		std::cout << "int: " << static_cast<int>(nb) << std::endl;
+
 }
 
-static void     convertToInt(double number)
+static void     convertToChar(double number)
 {
-	std::cout << "int: ";
+	 std::cout << "char: ";
 }
 
 static void     convertToFloat(double number)
@@ -49,6 +65,17 @@ void	ScalarConverter::convert(const std::string& input)
 
 
 
+ 	/*!(*endptr == '\0' || (*endptr == 'f' && endptr[1] == '\0'))
+				  ⬇
+     		!('f' == '\0' || ('f' == 'f' && '\0' == '\0'))
+				  ⬇
+	  	       (false || (true && true))
+				  ⬇
+	     	  	   (false || true)
+			 	  ⬇
+			       !(true)
+				  ⬇
+			       (false)*/
 
 /*
 
