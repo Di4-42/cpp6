@@ -32,7 +32,8 @@ void	convertToInt(const std::string input)
 	double nb = std::strtod(input.c_str(), &endptr); // input = "42.5f" | endptr = 'f' | nb = 42.5
 
 	if(endptr == input.c_str() || !(*endptr == '\0' || (*endptr == 'f' && endptr[1] == '\0')) // 
-			|| errno == ERANGE ||  nb != nb || nb <= static_cast<double>(INT_MIN) - 1.0
+			|| errno == ERANGE ||  nb != nb 
+			|| nb <= static_cast<double>(INT_MIN) - 1.0
 			|| nb >= static_cast<double>(INT_MAX) + 1.0)
 		std::cout << "int: impossible" << std::endl;
 	else
@@ -40,12 +41,37 @@ void	convertToInt(const std::string input)
 
 }
 
-static void     convertToChar(double number)
+static void     convertToChar(const std::string input)
 {
-	 std::cout << "char: ";
+	if (input.size() == 1 && !std::isdigit(static_cast<unsigned char>(input[0])))
+	{
+		if (std::isprint(static_cast<unsigned char>(input[0])))
+			std::cout << "char: '" << input[0] << "'" << std::endl;
+		else
+			std::cout << "char: Non displayable" << std::endl;
+		return;
+	}
+
+	char *endptr;
+	errno = 0;
+	double nb = std::strtod(input.c_str(), &endptr);
+
+	 if(endptr == input.c_str() || !(*endptr == '\0' || (*endptr == 'f' && endptr[1] == '\0'))
+			 || errno == ERANGE ||  nb != nb 
+			 || nb <= static_cast<double>(CHAR_MIN) - 1.0 
+			 || nb >= static_cast<double>(CHAR_MAX) + 1.0)
+	{
+		 std::cout << "char: impossible" << std::endl;
+		 return;
+	}
+	char c = static_cast<char>(nb);
+	if (std::isprint(static_cast<unsigned char>(c)))
+			std::cout << "char: '" << c << "'" << std::endl;
+	else
+			std::cout << "char: non displayable" << std::endl;
 }
 
-static void     convertToFloat(double number)
+/*static void     convertToFloat(double number)
 {
 	std::cout << "float: ";
 }
@@ -53,14 +79,14 @@ static void     convertToFloat(double number)
 static void	convertToDouble(double number)
 {
 	std::cout << "double: ";
-}
+}*/
 
 void	ScalarConverter::convert(const std::string& input)
 {
-	convertToChar(number);
-	convertToInt(number);
-	convertToFloat(number);
-	convertToDouble(number);
+	convertToChar(input);
+	convertToInt(input);
+	//convertToFloat(number);
+	//convertToDouble(number);
 }
 
 
