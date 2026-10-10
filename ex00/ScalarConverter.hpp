@@ -5,6 +5,9 @@
 #include <climits>
 #include <cerrno>
 #include <cstdlib>
+#include <cfloat>
+#include <iomanip> 
+#include <sstream>
 
 class ScalarConverter
 {
